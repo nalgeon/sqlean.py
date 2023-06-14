@@ -1,19 +1,9 @@
-name: Build and test
+name: Build and publish to PyPI
 
 on:
     push:
-        branches: [main]
-        tags-ignore:
+        tags:
             - "*"
-        paths:
-            - .github/**
-            - sqlean/**
-            - src/**
-            - test/**
-            - Makefile
-            - setup.py
-    pull_request:
-        branches: [main]
     workflow_dispatch:
 
 jobs:
@@ -44,29 +34,42 @@ jobs:
                       sqlite
                       test
 
-    test:
-        name: ${{ matrix.python-version }}
-        runs-on: ubuntu-latest
+    build:
+        name: Build wheels on ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
         needs: download-sources
         strategy:
-            fail-fast: false
             matrix:
-                python-version: [3.7, 3.8, 3.9, "3.10", "3.11"]
+                os: [ubuntu-latest, windows-latest, macOS-latest]
         steps:
             - name: Download sources
               uses: actions/download-artifact@v3
               with:
                   name: sources
 
-            - name: Setup Python
-              uses: actions/setup-python@v4
-              with:
-                  python-version: ${{ matrix.python-version }}
-
-            - name: Build and run tests
+            - name: Build wheels
+              uses: pypa/cibuildwheel@v2.13.1
               env:
-                  PYTHONPATH: ".:$PYTHONPATH"
-              run: |
-                  make clean
-                  python setup.py build_ext -i
-                  python -m test
+                  CIBW_SKIP: pp*
+
+            - name: Store wheels
+              uses: actions/upload-artifact@v3
+              with:
+                  name: wheels
+                  path: ./wheelhouse/*.whl
+
+    # publish:
+    #     name: Publish to PyPI
+    #     needs: build
+    #     runs-on: ubuntu-latest
+    #     permissions:
+    #         id-token: write
+    #     steps:
+    #         - name: Download wheels
+    #           uses: actions/download-artifact@v3
+    #           with:
+    #               name: wheels
+    #               path: dist
+
+    #         - name: Publish to PyPI
+    #           uses: pypa/gh-action-pypi-publish@release/v1
