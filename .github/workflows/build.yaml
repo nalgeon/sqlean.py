@@ -45,6 +45,7 @@ jobs:
     test:
         name: ${{ matrix.python-version }}
         runs-on: ubuntu-latest
+        needs: download-sources
         strategy:
             fail-fast: false
             matrix:
