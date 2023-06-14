@@ -1,4 +1,4 @@
-name: Build and publish to PyPI
+name: Publish to PyPI
 
 on:
     push:
@@ -40,7 +40,8 @@ jobs:
         needs: download-sources
         strategy:
             matrix:
-                os: [ubuntu-latest, windows-latest, macOS-latest]
+                # os: [ubuntu-latest, windows-latest, macos-latest]
+                os: [ubuntu-latest, macos-latest]
         steps:
             - name: Download sources
               uses: actions/download-artifact@v3
