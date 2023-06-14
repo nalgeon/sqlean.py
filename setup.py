@@ -116,7 +116,7 @@ class Builder(build_ext):
         ext.define_macros.append(("HAVE_CONFIG_H", "1"))
         ext.define_macros.append(("SUPPORT_UNICODE", "1"))
         if sys.platform == "win32":
-            ext.define_macros.append(("BYTE_ORDER", "1234"))
+            ext.define_macros.append(("BYTE_ORDER", "LITTLE_ENDIAN"))
             ext.define_macros.append(("PCRE2_STATIC", "1"))
 
     def _setup_sources(self, ext):
