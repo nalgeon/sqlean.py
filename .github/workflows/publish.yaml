@@ -51,7 +51,17 @@ jobs:
             - name: Build wheels
               uses: pypa/cibuildwheel@v2.13.1
               env:
-                  CIBW_SKIP: pp*
+                  # architectures:
+                  # - 64-bit linux
+                  # - 64-bit windows
+                  # - 64-bit macos (universal x86_64/arm64)
+                  CIBW_ARCHS_LINUX: x86_64
+                  CIBW_ARCHS_WINDOWS: AMD64
+                  CIBW_ARCHS_MACOS: universal2
+                  # disable builds:
+                  # - musllinux
+                  # - pypy
+                  CIBW_SKIP: "*-musllinux_* pp*"
 
             - name: Store wheels
               uses: actions/upload-artifact@v3
