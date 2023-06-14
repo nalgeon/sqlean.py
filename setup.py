@@ -68,10 +68,16 @@ class Builder(build_ext):
         # gcc optimization level
         ext.extra_compile_args.append("-O1")
 
-        # regexp constants
-        ext.extra_compile_args.append("-include")
-        ext.extra_compile_args.append(os.path.join(self.amalgamation_root, "regexp", "constants.h"))
+        self._setup_defines(ext)
+        self._setup_sources(ext)
 
+        if sys.platform != "win32":
+            # Include math library, required for fts5.
+            ext.extra_link_args.append("-lm")
+
+        build_ext.build_extension(self, ext)
+
+    def _setup_defines(self, ext):
         # sqlite options
         features = (
             "ENABLE_DBPAGE_VTAB",
@@ -104,6 +110,16 @@ class Builder(build_ext):
         ext.define_macros.append(("SQLITE_EXTRA_INIT", "core_init"))
         ext.define_macros.append(("SQLEAN_VERSION", f'"{VERSION}"'))
 
+        # Extension-specific flags
+        ext.define_macros.append(("PCRE2_CODE_UNIT_WIDTH", "8"))
+        ext.define_macros.append(("LINK_SIZE", "2"))
+        ext.define_macros.append(("HAVE_CONFIG_H", "1"))
+        ext.define_macros.append(("SUPPORT_UNICODE", "1"))
+        if sys.platform == "win32":
+            ext.define_macros.append(("BYTE_ORDER", "1234"))
+            ext.define_macros.append(("PCRE2_STATIC", "1"))
+
+    def _setup_sources(self, ext):
         ext.include_dirs.append(self.amalgamation_root)
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlite3.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-crypto.c"))
@@ -118,12 +134,6 @@ class Builder(build_ext):
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-uuid.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-vsv.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlite3-sqlean.c"))
-
-        if sys.platform != "win32":
-            # Include math library, required for fts5.
-            ext.extra_link_args.append("-lm")
-
-        build_ext.build_extension(self, ext)
 
     def __setattr__(self, k, v):
         # Make sure we don't link against the SQLite
