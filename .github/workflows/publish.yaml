@@ -59,18 +59,19 @@ jobs:
                   name: wheels
                   path: ./wheelhouse/*.whl
 
-    # publish:
-    #     name: Publish to PyPI
-    #     needs: build
-    #     runs-on: ubuntu-latest
-    #     permissions:
-    #         id-token: write
-    #     steps:
-    #         - name: Download wheels
-    #           uses: actions/download-artifact@v3
-    #           with:
-    #               name: wheels
-    #               path: dist
+    publish:
+        name: Publish to PyPI
+        needs: build
+        runs-on: ubuntu-latest
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+        permissions:
+            id-token: write
+        steps:
+            - name: Download wheels
+              uses: actions/download-artifact@v3
+              with:
+                  name: wheels
+                  path: dist
 
-    #         - name: Publish to PyPI
-    #           uses: pypa/gh-action-pypi-publish@release/v1
+            - name: Publish to PyPI
+              uses: pypa/gh-action-pypi-publish@release/v1
