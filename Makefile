@@ -5,7 +5,7 @@
 
 SQLITE_RELEASE_YEAR := 2023
 SQLITE_VERSION := 3420000
-SQLEAN_VERSION := 0.21.3
+SQLEAN_VERSION := 0.21.4
 
 prepare-src:
 	mkdir -p sqlite
@@ -23,11 +23,12 @@ download-sqlean:
 	curl -L https://github.com/nalgeon/sqlean/archive/refs/tags/$(SQLEAN_VERSION).zip --output sqlean.zip
 	unzip sqlean.zip
 	mv sqlean-$(SQLEAN_VERSION) sqlean-src
-	mkdir -p sqlite/crypto sqlite/define sqlite/fileio sqlite/fuzzy sqlite/math sqlite/regexp/pcre2 sqlite/stats sqlite/text sqlite/unicode sqlite/uuid sqlite/vsv
+	mkdir -p sqlite/crypto sqlite/define sqlite/fileio sqlite/fuzzy sqlite/ipaddr sqlite/math sqlite/regexp/pcre2 sqlite/stats sqlite/text sqlite/unicode sqlite/uuid sqlite/vsv
 	cp sqlean-src/src/crypto/*.h sqlite/crypto/
 	cp sqlean-src/src/define/*.h sqlite/define/
 	cp sqlean-src/src/fileio/*.h sqlite/fileio/
 	cp sqlean-src/src/fuzzy/*.h sqlite/fuzzy/
+	cp sqlean-src/src/ipaddr/*.h sqlite/ipaddr/
 	cp sqlean-src/src/math/*.h sqlite/math/
 	cp sqlean-src/src/regexp/*.h sqlite/regexp/
 	cp sqlean-src/src/regexp/pcre2/*.h sqlite/regexp/pcre2
@@ -41,6 +42,7 @@ download-sqlean:
 	cat sqlean-src/src/define/*.c > sqlite/sqlean-define.c
 	cat sqlean-src/src/fileio/*.c > sqlite/sqlean-fileio.c
 	cat sqlean-src/src/fuzzy/*.c > sqlite/sqlean-fuzzy.c
+	cat sqlean-src/src/ipaddr/*.c > sqlite/sqlean-ipaddr.c
 	cat sqlean-src/src/math/*.c > sqlite/sqlean-math.c
 	cat sqlean-src/src/regexp/pcre2/*.c sqlean-src/src/regexp/*.c > sqlite/sqlean-regexp.c
 	cat sqlean-src/src/stats/*.c > sqlite/sqlean-stats.c

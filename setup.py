@@ -20,7 +20,7 @@ from setuptools import Extension
 log = logging.getLogger(__name__)
 
 PACKAGE_NAME = "sqlean"
-VERSION = "0.21.3"
+VERSION = "0.21.4"
 
 # Module sources
 sources = [
@@ -134,6 +134,9 @@ class Builder(build_ext):
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-uuid.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-vsv.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlite3-sqlean.c"))
+
+        if sys.platform != "win32":
+            ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-ipaddr.c"))
 
     def __setattr__(self, k, v):
         # Make sure we don't link against the SQLite
