@@ -37,6 +37,7 @@ jobs:
                   path: |
                       MANIFEST.in
                       Makefile
+                      README.md
                       setup.cfg
                       setup.py
                       sqlean
