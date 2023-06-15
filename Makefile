@@ -5,7 +5,7 @@
 
 SQLITE_RELEASE_YEAR := 2023
 SQLITE_VERSION := 3420000
-SQLEAN_VERSION := 0.21.4
+SQLEAN_VERSION := 0.21.5
 
 prepare-src:
 	mkdir -p sqlite
