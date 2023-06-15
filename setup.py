@@ -110,7 +110,7 @@ class Builder(build_ext):
         ext.define_macros.append(("SQLITE_EXTRA_INIT", "core_init"))
         if sys.platform == "win32":
             # force cl.exe to treat it as string
-            ext.define_macros.append(("SQLEAN_VERSION", f"'\"{VERSION}\"'"))
+            ext.define_macros.append(("SQLEAN_VERSION", f'\\"{VERSION}\\"'))
         else:
             ext.define_macros.append(("SQLEAN_VERSION", f'"{VERSION}"'))
 
