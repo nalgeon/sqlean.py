@@ -11,6 +11,7 @@
 
 import logging
 import os
+from pathlib import Path
 import setuptools
 import sys
 
@@ -21,6 +22,10 @@ log = logging.getLogger(__name__)
 
 PACKAGE_NAME = "sqlean"
 VERSION = "0.21.5"
+
+SHORT_DESCRIPTION = "sqlite3 with extensions"
+LONG_DESCRIPTION = Path("README.md").read_text()
+
 
 # Module sources
 sources = [
@@ -150,8 +155,9 @@ def get_setup_args():
     return dict(
         name=f"{PACKAGE_NAME}.py",
         version=VERSION,
-        description="SQLite Python wrapper bundled with Sqlean extensions",
-        long_description="",
+        description=SHORT_DESCRIPTION,
+        long_description=LONG_DESCRIPTION,
+        long_description_content_type="text/markdown",
         author="Anton Zhiyanov",
         author_email="m@antonz.org",
         license="zlib/libpng",
