@@ -2,6 +2,10 @@
 
 This package provides an SQLite Python wrapper bundled with [`sqlean`](https://github.com/nalgeon/sqlean) extensions. It's a drop-in replacement for the standard library's [`sqlite3`](https://docs.python.org/3/library/sqlite3.html) module.
 
+```
+pip install sqlean.py
+```
+
 ```python
 import sqlean as sqlite3
 
@@ -17,12 +21,29 @@ print(cur.fetchone())
 conn.close()
 ```
 
+## Extensions
+
+`sqlean.py` contains 12 essential SQLite extensions:
+
+-   [crypto](https://github.com/nalgeon/sqlean/blob/main/docs/crypto.md): Hashing, encoding and decoding data
+-   [define](https://github.com/nalgeon/sqlean/blob/main/docs/define.md): User-defined functions and dynamic SQL
+-   [fileio](https://github.com/nalgeon/sqlean/blob/main/docs/fileio.md): Reading and writing files
+-   [fuzzy](https://github.com/nalgeon/sqlean/blob/main/docs/fuzzy.md): Fuzzy string matching and phonetics
+-   [ipaddr](https://github.com/nalgeon/sqlean/blob/main/docs/ipaddr.md): IP address manipulation
+-   [math](https://github.com/nalgeon/sqlean/blob/main/docs/math.md): Math functions
+-   [regexp](https://github.com/nalgeon/sqlean/blob/main/docs/regexp.md): Regular expressions
+-   [stats](https://github.com/nalgeon/sqlean/blob/main/docs/stats.md): Math statistics
+-   [text](https://github.com/nalgeon/sqlean/blob/main/docs/text.md): String functions
+-   [unicode](https://github.com/nalgeon/sqlean/blob/main/docs/unicode.md): Unicode support
+-   [uuid](https://github.com/nalgeon/sqlean/blob/main/docs/uuid.md): Universally Unique IDentifiers
+-   [vsv](https://github.com/nalgeon/sqlean/blob/main/docs/vsv.md): CSV files as virtual tables
+
 ## Installation
 
 A binary package (wheel) is available for the following operating systems:
 
 -   Windows (64-bit)
--   Ubuntu (and other Debian-based distributions)
+-   Linux (64-bit)
 -   macOS (both Intel and Apple processors)
 
 ```
@@ -52,7 +73,7 @@ python -m test
 python -m pip wheel . -w dist
 ```
 
-## License
+## Credits
 
 Based on the [pysqlite3](https://github.com/coleifer/pysqlite3) project. Available under the [Zlib license](LICENSE).
 
