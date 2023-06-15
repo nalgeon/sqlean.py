@@ -20,7 +20,7 @@ from setuptools import Extension
 log = logging.getLogger(__name__)
 
 PACKAGE_NAME = "sqlean"
-VERSION = "0.21.2"
+VERSION = "0.21.3"
 
 # Module sources
 sources = [
