@@ -108,11 +108,6 @@ class Builder(build_ext):
 
         # Auto-load sqlean extensions
         ext.define_macros.append(("SQLITE_EXTRA_INIT", "core_init"))
-        if sys.platform == "win32":
-            # force cl.exe to treat it as string
-            ext.define_macros.append(("SQLEAN_VERSION", f'\\"{VERSION}\\"'))
-        else:
-            ext.define_macros.append(("SQLEAN_VERSION", f'"{VERSION}"'))
 
         # Extension-specific flags
         ext.define_macros.append(("PCRE2_CODE_UNIT_WIDTH", "8"))
