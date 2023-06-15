@@ -2,6 +2,7 @@ import sys
 import unittest
 import unittest.mock
 from sqlean import dbapi2 as sqlite
+from setup import VERSION
 
 
 class Test(unittest.TestCase):
@@ -56,6 +57,9 @@ class Test(unittest.TestCase):
     def test_unicode(self):
         self._assert_eq("nupper('пРиВеТ')", "ПРИВЕТ")
         self._assert_eq("unaccent('hôtel')", "hotel")
+
+    def test_version(self):
+        self._assert_eq("sqlean_version()", VERSION)
 
     def _assert_eq(self, expr, want):
         cur = self.conn.execute(f"select {expr}")

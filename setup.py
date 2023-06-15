@@ -50,7 +50,7 @@ if sys.platform == "darwin":
 
 
 def quote_argument(arg):
-    q = '\\"' if sys.platform == "win32" and sys.version_info < (3, 9) else '"'
+    q = '\\"' if sys.platform == "win32" and sys.version_info < (3, 7) else '"'
     return q + arg + q
 
 
@@ -108,6 +108,7 @@ class Builder(build_ext):
 
         # Auto-load sqlean extensions
         ext.define_macros.append(("SQLITE_EXTRA_INIT", "core_init"))
+        ext.define_macros.append(("SQLEAN_VERSION", quote_argument(VERSION)))
 
         # Extension-specific flags
         ext.define_macros.append(("PCRE2_CODE_UNIT_WIDTH", "8"))
