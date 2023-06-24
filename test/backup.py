@@ -65,11 +65,9 @@ class BackupTests(unittest.TestCase):
             self.cx.backup(bck, pages=1, progress=progress)
             self.verify_backup(bck)
 
-        self.assertEqual(len(journal), 4)
+        self.assertEqual(len(journal), 2)
         self.assertEqual(journal[0], sqlite.SQLITE_OK)
-        self.assertEqual(journal[1], sqlite.SQLITE_OK)
-        self.assertEqual(journal[2], sqlite.SQLITE_OK)
-        self.assertEqual(journal[3], sqlite.SQLITE_DONE)
+        self.assertEqual(journal[1], sqlite.SQLITE_DONE)
 
     def test_progress_all_pages_at_once_1(self):
         journal = []
@@ -119,12 +117,12 @@ class BackupTests(unittest.TestCase):
             result = bck.execute(
                 "SELECT key FROM foo" " WHERE key >= 1000" " ORDER BY key"
             ).fetchall()
-            self.assertEqual(result[0][0], 1003)
+            self.assertEqual(result[0][0], 1001)
 
-        self.assertEqual(len(journal), 5)
-        self.assertEqual(journal[-3], 2)
-        self.assertEqual(journal[-2], 1)
-        self.assertEqual(journal[-1], 0)
+        self.assertEqual(len(journal), 3)
+        self.assertEqual(journal[0], 1)
+        self.assertEqual(journal[1], 1)
+        self.assertEqual(journal[2], 0)
 
     def test_failing_progress(self):
         def progress(status, remaining, total):

@@ -21,7 +21,8 @@ from setuptools import Extension
 log = logging.getLogger(__name__)
 
 PACKAGE_NAME = "sqlean"
-VERSION = "0.21.5"
+SQLEAN_VERSION = "0.21.5"
+VERSION = f"{SQLEAN_VERSION}.1"
 
 SHORT_DESCRIPTION = "sqlite3 with extensions"
 LONG_DESCRIPTION = Path("README.md").read_text()
@@ -46,7 +47,6 @@ sources = [
 
 # Packages
 packages = [PACKAGE_NAME]
-EXTENSION_MODULE_NAME = "._sqlite3"
 
 # Work around clang raising hard error for unused arguments
 if sys.platform == "darwin":
@@ -113,7 +113,7 @@ class Builder(build_ext):
 
         # Auto-load sqlean extensions
         ext.define_macros.append(("SQLITE_EXTRA_INIT", "core_init"))
-        ext.define_macros.append(("SQLEAN_VERSION", quote_argument(VERSION)))
+        ext.define_macros.append(("SQLEAN_VERSION", quote_argument(SQLEAN_VERSION)))
 
         # Extension-specific flags
         ext.define_macros.append(("PCRE2_CODE_UNIT_WIDTH", "8"))
@@ -131,17 +131,15 @@ class Builder(build_ext):
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-define.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-fileio.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-fuzzy.c"))
-        ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-math.c"))
+        if sys.platform != "win32":
+            ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-ipaddr.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-regexp.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-stats.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-text.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-unicode.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-uuid.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-vsv.c"))
-        ext.sources.append(os.path.join(self.amalgamation_root, "sqlite3-sqlean.c"))
-
-        if sys.platform != "win32":
-            ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-ipaddr.c"))
+        ext.sources.append(os.path.join("src", "sqlean.c"))
 
     def __setattr__(self, k, v):
         # Make sure we don't link against the SQLite
@@ -167,7 +165,7 @@ def get_setup_args():
         packages=packages,
         ext_modules=[
             Extension(
-                name=PACKAGE_NAME + EXTENSION_MODULE_NAME,
+                name=f"{PACKAGE_NAME}._sqlite3",
                 sources=sources,
                 define_macros=define_macros,
             )

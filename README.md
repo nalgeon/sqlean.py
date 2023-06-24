@@ -7,10 +7,13 @@ pip install sqlean.py
 ```
 
 ```python
-import sqlean as sqlite3
+import sqlean
+
+# enable all extensions
+sqlean.extensions.enable_all()
 
 # has the same API as the default `sqlite3` module
-conn = sqlite3.connect(":memory:")
+conn = sqlean.connect(":memory:")
 conn.execute("create table employees(id, name)")
 
 # and comes with the `sqlean` extensions
@@ -54,10 +57,38 @@ Note that the package name is `sqlean.py`, while the code imports are just `sqle
 
 ## Usage
 
+All extensions are disabled by default. You can still use `sqlean` as a drop-in replacement for `sqlite3`:
+
 ```python
 import sqlean as sqlite3
 
 conn = sqlite3.connect(":memory:")
+cur = conn.execute("select 'sql is awesome'")
+print(cur.fetchone())
+conn.close()
+```
+
+To enable all extensions, call `sqlean.extensions.enable_all()` before calling `connect()`:
+
+```python
+import sqlean
+
+sqlean.extensions.enable_all()
+
+conn = sqlean.connect(":memory:")
+cur = conn.execute("select median(value) from generate_series(1, 99)")
+print(cur.fetchone())
+conn.close()
+```
+
+To enable specific extensions, call `sqlean.extensions.enable()`:
+
+```python
+import sqlean
+
+sqlean.extensions.enable("stats", "text")
+
+conn = sqlean.connect(":memory:")
 cur = conn.execute("select median(value) from generate_series(1, 99)")
 print(cur.fetchone())
 conn.close()
@@ -67,7 +98,18 @@ conn.close()
 
 For development purposes only.
 
+Prepare source files:
+
 ```
+make prepare-src
+make download-sqlite
+make download-sqlean
+```
+
+Build and test the package:
+
+```
+make clean
 python setup.py build_ext -i
 python -m test
 python -m pip wheel . -w dist

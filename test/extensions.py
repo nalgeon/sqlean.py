@@ -1,12 +1,16 @@
 import sys
 import unittest
 import unittest.mock
+import sqlean
 from sqlean import dbapi2 as sqlite
-from setup import VERSION
+from setup import SQLEAN_VERSION
 
 
-class Test(unittest.TestCase):
+class FuncTest(unittest.TestCase):
     def setUp(self):
+        sqlean.extensions.enable_all()
+        self.conn = sqlite.connect(":memory:")
+        self.conn.close()
         self.conn = sqlite.connect(":memory:")
 
     def tearDown(self):
@@ -59,7 +63,7 @@ class Test(unittest.TestCase):
         self._assert_eq("unaccent('hôtel')", "hotel")
 
     def test_version(self):
-        self._assert_eq("sqlean_version()", VERSION)
+        self._assert_eq("sqlean_version()", SQLEAN_VERSION)
 
     def _assert_eq(self, expr, want):
         cur = self.conn.execute(f"select {expr}")
@@ -67,8 +71,39 @@ class Test(unittest.TestCase):
         self.assertEqual(got, want)
 
 
+class EnableTest(unittest.TestCase):
+    def setUp(self):
+        sqlean.extensions.enable("stats", "text")
+        self.conn = sqlite.connect(":memory:")
+
+    def test_enabled_1(self):
+        sql = "select median(value) from generate_series(1, 99)"
+        cur = self.conn.execute(sql)
+        got = cur.fetchone()[0]
+        self.assertEqual(got, 50)
+
+    def test_enabled_2(self):
+        sql = "select text_substring('hello world', 7)"
+        cur = self.conn.execute(sql)
+        got = cur.fetchone()[0]
+        self.assertEqual(got, "world")
+
+    def test_disabled(self):
+        sql = "select dlevenshtein('abc', 'abcd')"
+        with self.assertRaises(Exception, msg="no such function: dlevenshtein"):
+            self.conn.execute(sql)
+
+    def tearDown(self):
+        self.conn.close()
+
+
 def suite():
-    return unittest.TestSuite((unittest.makeSuite(Test),))
+    return unittest.TestSuite(
+        (
+            unittest.makeSuite(FuncTest),
+            unittest.makeSuite(EnableTest),
+        )
+    )
 
 
 def test():

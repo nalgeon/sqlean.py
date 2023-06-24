@@ -50,7 +50,6 @@ download-sqlean:
 	cat sqlean-src/src/unicode/*.c > sqlite/sqlean-unicode.c
 	cat sqlean-src/src/uuid/*.c > sqlite/sqlean-uuid.c
 	cat sqlean-src/src/vsv/*.c > sqlite/sqlean-vsv.c
-	cat sqlean-src/src/sqlite3-sqlean.c > sqlite/sqlite3-sqlean.c
 	cat src/init.c >> sqlite/sqlite3.c
 	cp src/init.h sqlite
 	rm -rf sqlean-src
