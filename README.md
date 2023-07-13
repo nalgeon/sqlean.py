@@ -121,4 +121,4 @@ Based on the [pysqlite3](https://github.com/coleifer/pysqlite3) project. Availab
 
 ## Stay tuned
 
-Follow [**@ohmypy**](https://twitter.com/ohmypy) on Twitter to keep up with new features 🚀
+[**Subscribe**](https://antonz.org/subscribe/) to stay on top of new features 🚀
