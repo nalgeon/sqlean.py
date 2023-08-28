@@ -21,7 +21,7 @@ from setuptools import Extension
 log = logging.getLogger(__name__)
 
 PACKAGE_NAME = "sqlean"
-SQLEAN_VERSION = "0.21.5"
+SQLEAN_VERSION = "0.21.8"
 VERSION = f"{SQLEAN_VERSION}.3"
 
 SHORT_DESCRIPTION = "sqlite3 with extensions"
