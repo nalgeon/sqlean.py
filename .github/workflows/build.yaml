@@ -2,7 +2,8 @@ name: Build and test
 
 on:
     push:
-        branches: [main]
+        branches:
+            - main
         tags-ignore:
             - "*"
         paths:
@@ -13,7 +14,8 @@ on:
             - Makefile
             - setup.py
     pull_request:
-        branches: [main]
+        branches:
+            - main
     workflow_dispatch:
 
 jobs:
@@ -52,7 +54,13 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                python-version: [3.7, 3.8, 3.9, "3.10", "3.11", "3.12-dev"]
+                python-version:
+                    - "3.7"
+                    - "3.8"
+                    - "3.9"
+                    - "3.10"
+                    - "3.11"
+                    - "3.12-dev"
         steps:
             - name: Download sources
               uses: actions/download-artifact@v3
