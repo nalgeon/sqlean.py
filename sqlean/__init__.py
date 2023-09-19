@@ -17,6 +17,15 @@
 # 2. Altered source versions must be plainly marked as such, and must not be
 #    misrepresented as being the original software.
 # 3. This notice may not be removed or altered from any source distribution.
+"""SQLean - Python's SQLite3 + Extensions
 
+More info:
+    https://github.com/nalgeon/sqlean
+"""
+
+# Future Imports
+from __future__ import annotations
+
+# Third-Party Imports
 from sqlean import extensions
 from sqlean.dbapi2 import *
