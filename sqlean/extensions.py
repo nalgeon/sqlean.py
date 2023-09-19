@@ -1,57 +1,62 @@
-"""
-Extension management.
-"""
+"""Extension management."""
 
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
 import os
+from typing import Set
 
-_extensions = {
-    "crypto",
-    "define",
-    "fileio",
-    "fuzzy",
-    "ipaddr",
-    "regexp",
-    "stats",
-    "text",
-    "unicode",
-    "uuid",
-    "vsv",
+_known_extensions: Set[str] = {
+    "CRYPTO",
+    "DEFINE",
+    "FILEIO",
+    "FUZZY",
+    "IPADDR",
+    "REGEXP",
+    "STATS",
+    "TEXT",
+    "UNICODE",
+    "UUID",
+    "VSV",
 }
 
 
-def enable_all():
+def enable_all() -> None:
     """Enables all extensions."""
     os.environ["SQLEAN_ENABLE"] = "1"
 
 
-def disable_all():
+def disable_all() -> None:
     """Disables all extensions."""
     os.environ["SQLEAN_ENABLE"] = "0"
 
 
-def enable(*names):
+def enable(*names: str) -> None:
     """Enables specific extensions."""
+
     _clear_flags()
-    for name in names:
-        if name not in _extensions:
-            continue
-        os.environ[f"SQLEAN_ENABLE_{name.upper()}"] = "1"
+
+    for name in _known_extensions.intersection(map(str.upper, names)):
+        os.environ[f"SQLEAN_ENABLE_{name}"] = "1"
 
 
-def disable(*names):
-    """Disables specific extensions."""
+def disable(*names: str) -> None:
+    """Disable the specified extension(s)."""
+
     _clear_flags()
-    for name in names:
-        if name not in _extensions:
-            continue
-        os.environ[f"SQLEAN_ENABLE_{name.upper()}"] = "0"
+
+    for name in _known_extensions.intersection(map(str.upper, names)):
+        os.environ[f"SQLEAN_ENABLE_{name}"] = "0"
 
 
 def _clear_flags():
     """Clears 'enabled' flags for all extensions."""
-    if "SQLEAN_ENABLE" in os.environ:
-        del os.environ["SQLEAN_ENABLE"]
-    for name in _extensions:
-        flag = f"SQLEAN_ENABLE_{name.upper()}"
-        if flag in os.environ:
-            del os.environ[flag]
+    for flag in (
+        "SQLEAN_ENABLE",
+        *map(
+            "SQLEAN_ENABLE_%s".__mod__,
+            _known_extensions,
+        ),
+    ):
+        os.environ.pop(flag, None)
