@@ -6,32 +6,45 @@
 
 # Modified by Anton Zhiyanov
 # https://github.com/nalgeon/sqlean.py
+"""SQLite Python wrapper bundled with Sqlean extensions."""
 
-# SQLite Python wrapper bundled with Sqlean extensions.
+# Future Imports
+from __future__ import annotations
 
+# Standard Library Imports
 import logging
 import os
-from pathlib import Path
-import setuptools
 import sys
+from pathlib import Path
+from typing import (
+    Any,
+    Dict,
+    List,
+    Tuple,
+    TypeVar,
+)
 
-from setuptools.command.build_ext import build_ext
+# Third-Party Imports
+import setuptools
 from setuptools import Extension
+from setuptools.command.build_ext import build_ext
 
 log = logging.getLogger(__name__)
+SetupArg = TypeVar("SetupArg")
 
-PACKAGE_NAME = "sqlean"
-SQLEAN_VERSION = "0.21.8"
-VERSION = f"{SQLEAN_VERSION}.3"
 
-SHORT_DESCRIPTION = "sqlite3 with extensions"
-LONG_DESCRIPTION = Path("README.md").read_text()
+PACKAGE_NAME: str = "sqlean"
+SQLEAN_VERSION: str = "0.21.8"
+VERSION: str = f"{SQLEAN_VERSION}.3"
+
+SHORT_DESCRIPTION: str = "sqlite3 with extensions"
+LONG_DESCRIPTION: str = Path("README.md").read_text()
 
 
 # Module sources
 sources = [
     os.path.join("src", source)
-    for source in [
+    for source in (
         "module.c",
         "connection.c",
         "cursor.c",
@@ -42,7 +55,7 @@ sources = [
         "util.c",
         "row.c",
         "blob.c",
-    ]
+    )
 ]
 
 # Packages
@@ -54,24 +67,38 @@ if sys.platform == "darwin":
     log.info("CFLAGS: " + os.environ["CFLAGS"])
 
 
-def quote_argument(arg):
+def quote_argument(arg: str) -> str:
+    """Apply the correct platform-specific quotes to the supplied argument."""
     q = '\\"' if sys.platform == "win32" and sys.version_info < (3, 7) else '"'
     return q + arg + q
 
 
-define_macros = [("MODULE_NAME", quote_argument(PACKAGE_NAME + ".dbapi2"))]
+define_macros: List[Tuple[str, ...]] = [
+    ("MODULE_NAME", quote_argument(PACKAGE_NAME + ".dbapi2")),
+]
 
 
 class Builder(build_ext):
-    description = "Builds a C extension using a sqlite3 amalgamation"
+    """Custom C-extension builder."""
 
-    amalgamation_root = "sqlite"
+    description: str = "Builds a C extension using a sqlite3 amalgamation"
+    amalgamation_root: str = "sqlite"
 
-    def build_extension(self, ext):
+    def __setattr__(self, key: str, value: Any) -> None:
+        # Make sure we don't link against the SQLite
+        # library, no matter what setup.cfg says
+        self.__dict__[key] = value if key != "libraries" else None
+
+    def build_extension(self, ext: Extension) -> None:
+        """Build the specified extension."""
+        breakpoint()
         log.info(self.description)
 
         # gcc optimization level
         ext.extra_compile_args.append("-O1")
+
+        # disable sign-comparison warning
+        ext.extra_compile_args.append("-Wsign-compare")
 
         self._setup_defines(ext)
         self._setup_sources(ext)
@@ -82,7 +109,10 @@ class Builder(build_ext):
 
         build_ext.build_extension(self, ext)
 
-    def _setup_defines(self, ext):
+    @staticmethod
+    def _setup_defines(ext: Extension) -> None:
+        """Set up the extensions macro definitions."""
+
         # sqlite options
         features = (
             "ENABLE_DBPAGE_VTAB",
@@ -99,8 +129,8 @@ class Builder(build_ext):
             "LIKE_DOESNT_MATCH_BLOBS",
             "USE_URI",
         )
-        for feature in features:
-            ext.define_macros.append(("SQLITE_%s" % feature, "1"))
+
+        ext.define_macros.extend((("SQLITE_%s" % feature, "1") for feature in features))
 
         # Always use memory for temp store.
         ext.define_macros.append(("SQLITE_TEMP_STORE", "3"))
@@ -120,36 +150,44 @@ class Builder(build_ext):
         ext.define_macros.append(("LINK_SIZE", "2"))
         ext.define_macros.append(("HAVE_CONFIG_H", "1"))
         ext.define_macros.append(("SUPPORT_UNICODE", "1"))
+
         if sys.platform == "win32":
             ext.define_macros.append(("BYTE_ORDER", "LITTLE_ENDIAN"))
             ext.define_macros.append(("PCRE2_STATIC", "1"))
 
-    def _setup_sources(self, ext):
+    def _setup_sources(self, ext: Extension):
+        """Set up the extensions source directories."""
+
         ext.include_dirs.append(self.amalgamation_root)
-        ext.sources.append(os.path.join(self.amalgamation_root, "sqlite3.c"))
-        ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-crypto.c"))
-        ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-define.c"))
-        ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-fileio.c"))
-        ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-fuzzy.c"))
+
+        ext.sources.extend(
+            (
+                os.path.join(self.amalgamation_root, "sqlite3.c"),
+                os.path.join(self.amalgamation_root, "sqlean-crypto.c"),
+                os.path.join(self.amalgamation_root, "sqlean-define.c"),
+                os.path.join(self.amalgamation_root, "sqlean-fileio.c"),
+                os.path.join(self.amalgamation_root, "sqlean-fuzzy.c"),
+            )
+        )
+
         if sys.platform != "win32":
             ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-ipaddr.c"))
-        ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-regexp.c"))
-        ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-stats.c"))
-        ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-text.c"))
-        ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-unicode.c"))
-        ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-uuid.c"))
-        ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-vsv.c"))
-        ext.sources.append(os.path.join("src", "sqlean.c"))
 
-    def __setattr__(self, k, v):
-        # Make sure we don't link against the SQLite
-        # library, no matter what setup.cfg says
-        if k == "libraries":
-            v = None
-        self.__dict__[k] = v
+        ext.sources.extend(
+            (
+                os.path.join(self.amalgamation_root, "sqlean-regexp.c"),
+                os.path.join(self.amalgamation_root, "sqlean-stats.c"),
+                os.path.join(self.amalgamation_root, "sqlean-text.c"),
+                os.path.join(self.amalgamation_root, "sqlean-unicode.c"),
+                os.path.join(self.amalgamation_root, "sqlean-uuid.c"),
+                os.path.join(self.amalgamation_root, "sqlean-vsv.c"),
+                os.path.join("src", "sqlean.c"),
+            )
+        )
 
 
-def get_setup_args():
+def get_setup_args() -> Dict[str, SetupArg]:
+    """Construct a dictionary of the necessary setup arguments."""
     return dict(
         name=f"{PACKAGE_NAME}.py",
         version=VERSION,
