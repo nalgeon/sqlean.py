@@ -13,7 +13,7 @@ prepare-src:
 
 download-sqlite:
 	curl -L https://github.com/sqlite/sqlite/raw/master/src/test_windirent.h --output sqlite/test_windirent.h
-	curl -L http://sqlite.org/$(SQLITE_RELEASE_YEAR)/sqlite-amalgamation-$(SQLITE_VERSION).zip --output sqlite.zip
+	curl -L https://sqlite.org/$(SQLITE_RELEASE_YEAR)/sqlite-amalgamation-$(SQLITE_VERSION).zip --output sqlite.zip
 	unzip sqlite.zip
 	mv sqlite-amalgamation-$(SQLITE_VERSION)/* sqlite
 	rmdir sqlite-amalgamation-$(SQLITE_VERSION)
@@ -23,7 +23,19 @@ download-sqlean:
 	curl -L https://github.com/nalgeon/sqlean/archive/refs/tags/$(SQLEAN_VERSION).zip --output sqlean.zip
 	unzip sqlean.zip
 	mv sqlean-$(SQLEAN_VERSION) sqlean-src
-	mkdir -p sqlite/crypto sqlite/define sqlite/fileio sqlite/fuzzy sqlite/ipaddr sqlite/math sqlite/regexp/pcre2 sqlite/stats sqlite/text sqlite/unicode sqlite/uuid sqlite/vsv
+	mkdir -p \
+          sqlite/crypto \
+          sqlite/define \
+          sqlite/fileio \
+          sqlite/fuzzy \
+          sqlite/ipaddr \
+          sqlite/math \
+          sqlite/regexp/pcre2 \
+          sqlite/stats \
+          sqlite/text \
+          sqlite/unicode \
+          sqlite/uuid \
+          sqlite/vsv
 	cp sqlean-src/src/crypto/*.h sqlite/crypto/
 	cp sqlean-src/src/define/*.h sqlite/define/
 	cp sqlean-src/src/fileio/*.h sqlite/fileio/
