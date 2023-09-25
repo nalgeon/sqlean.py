@@ -28,18 +28,22 @@ conn.close()
 
 `sqlean.py` contains 12 essential SQLite extensions:
 
--   [crypto](https://github.com/nalgeon/sqlean/blob/main/docs/crypto.md): Hashing, encoding and decoding data
--   [define](https://github.com/nalgeon/sqlean/blob/main/docs/define.md): User-defined functions and dynamic SQL
--   [fileio](https://github.com/nalgeon/sqlean/blob/main/docs/fileio.md): Reading and writing files
--   [fuzzy](https://github.com/nalgeon/sqlean/blob/main/docs/fuzzy.md): Fuzzy string matching and phonetics
--   [ipaddr](https://github.com/nalgeon/sqlean/blob/main/docs/ipaddr.md): IP address manipulation
--   [math](https://github.com/nalgeon/sqlean/blob/main/docs/math.md): Math functions
--   [regexp](https://github.com/nalgeon/sqlean/blob/main/docs/regexp.md): Regular expressions
--   [stats](https://github.com/nalgeon/sqlean/blob/main/docs/stats.md): Math statistics
--   [text](https://github.com/nalgeon/sqlean/blob/main/docs/text.md): String functions
--   [unicode](https://github.com/nalgeon/sqlean/blob/main/docs/unicode.md): Unicode support
--   [uuid](https://github.com/nalgeon/sqlean/blob/main/docs/uuid.md): Universally Unique IDentifiers
--   [vsv](https://github.com/nalgeon/sqlean/blob/main/docs/vsv.md): CSV files as virtual tables
+| Extension | Description | Safety concerns<br>*Last update: 2023-09-25* |
+|-----------|-------------|----------------------------------------------|
+| [crypto](https://github.com/nalgeon/sqlean/blob/main/docs/crypto.md) | Hashing, encoding and decoding data | Safe |
+| [define](https://github.com/nalgeon/sqlean/blob/main/docs/define.md) | User-defined functions and dynamic SQL | Safe |
+| [fileio](https://github.com/nalgeon/sqlean/blob/main/docs/fileio.md) | Reading and writing files | **Unsafe**: allows arbitrary file reading and writing. |
+| [fuzzy](https://github.com/nalgeon/sqlean/blob/main/docs/fuzzy.md) | Fuzzy string matching and phonetics | Safe |
+| [ipaddr](https://github.com/nalgeon/sqlean/blob/main/docs/ipaddr.md) | IP address manipulation | Safe |
+| [math](https://github.com/nalgeon/sqlean/blob/main/docs/math.md) | Math functions | Safe |
+| [regexp](https://github.com/nalgeon/sqlean/blob/main/docs/regexp.md) | Regular expressions | **Unsafe**: allows DOS attacks due to the non-linear behavior of some functions. |
+| [stats](https://github.com/nalgeon/sqlean/blob/main/docs/stats.md) | Math statistics | Safe |
+| [text](https://github.com/nalgeon/sqlean/blob/main/docs/text.md) | String functions | Safe |
+| [unicode](https://github.com/nalgeon/sqlean/blob/main/docs/unicode.md) | Unicode support | Safe |
+| [uuid](https://github.com/nalgeon/sqlean/blob/main/docs/uuid.md) | Universally Unique IDentifiers | Safe |
+| [vsv](https://github.com/nalgeon/sqlean/blob/main/docs/vsv.md) | CSV files as virtual tables | **Unsafe**: allows arbitrary file reading and writing. |
+
+Additionally, `sqlean.py` activates commonly used compile-time SQLite extensions and features, as specified in the `_setup_defines` function within the [`setup.py`](https://github.com/nalgeon/sqlean.py/blob/main/setup.py) script.
 
 ## Installation
 
