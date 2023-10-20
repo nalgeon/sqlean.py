@@ -51,14 +51,21 @@ jobs:
               with:
                   name: sources
 
+            # only initialize QEMU on Linux, other platforms don't need it
+            - name: Set up QEMU to add multiplatform support
+              if: runner.os == 'Linux'
+              uses: docker/setup-qemu-action@v3
+              with:
+                platforms: arm64
+
             - name: Build wheels
-              uses: pypa/cibuildwheel@v2.15.0
+              uses: pypa/cibuildwheel@v2.16.2
               env:
                   # architectures:
                   # - 64-bit linux (x86_64/i686/aarch64/ppc64le/s390x)
                   # - 64-bit windows (AMD64/x86/ARM64)
                   # - 64-bit macos (x86_64/arm64/universal2)
-                  CIBW_ARCHS_LINUX: x86_64
+                  CIBW_ARCHS_LINUX: x86_64 aarch64
                   CIBW_ARCHS_WINDOWS: AMD64 ARM64
                   CIBW_ARCHS_MACOS: x86_64 arm64
                   # disable builds:
