@@ -87,9 +87,10 @@ jobs:
                   CIBW_ARCHS_WINDOWS: AMD64 ARM64
                   CIBW_ARCHS_MACOS: x86_64 arm64
                   # disable builds:
+                  # - unsupported python versions
                   # - musllinux
                   # - pypy
-                  CIBW_SKIP: "*-musllinux_* pp*"
+                  CIBW_SKIP: "cp36-* cp37-* *-musllinux_* pp*"
 
             - name: Store wheels
               uses: actions/upload-artifact@v3
