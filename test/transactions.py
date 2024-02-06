@@ -274,6 +274,9 @@ class DMLStatementDetectionTestCase(unittest.TestCase):
     def test_dml_detection_vacuum(self):
         conn = sqlite.connect(':memory:')
         conn.execute('vacuum')
+        self.assertFalse(conn.in_transaction)
+
+    def test_dml_detection_pragma(self):
         conn = sqlite.connect(get_db_path())
         conn.execute('pragma journal_mode=\'wal\'')
         jmode, = conn.execute('pragma journal_mode').fetchone()
