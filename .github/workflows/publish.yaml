@@ -77,7 +77,7 @@ jobs:
                 platforms: arm64
 
             - name: Build wheels
-              uses: pypa/cibuildwheel@v2.16.2
+              uses: pypa/cibuildwheel@v2.16.5
               env:
                   # architectures:
                   # - 64-bit linux (x86_64/i686/aarch64/ppc64le/s390x)
