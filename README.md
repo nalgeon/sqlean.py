@@ -119,6 +119,6 @@ python -m pip wheel . -w dist
 
 Based on the [pysqlite3](https://github.com/coleifer/pysqlite3) project. Available under the [Zlib license](LICENSE).
 
-## Stay tuned
+## Support
 
-[**Subscribe**](https://antonz.org/subscribe/) to stay on top of new features 🚀
+The package is provided as-is, and I don't currently plan to change anything except to update the SQLite version from time to time.
