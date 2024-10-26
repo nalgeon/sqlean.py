@@ -21,8 +21,8 @@ from setuptools import Extension
 log = logging.getLogger(__name__)
 
 PACKAGE_NAME = "sqlean"
-SQLEAN_VERSION = "0.24.0"
-VERSION = "3.46.0"
+SQLEAN_VERSION = "0.27.1"
+VERSION = "3.47.0"
 
 SHORT_DESCRIPTION = "sqlite3 with extensions"
 LONG_DESCRIPTION = Path("README.md").read_text()
@@ -50,6 +50,7 @@ packages = [PACKAGE_NAME]
 
 # Work around clang raising hard error for unused arguments
 if sys.platform == "darwin":
+    os.environ["MACOSX_DEPLOYMENT_TARGET"] = "10.15"
     os.environ["CFLAGS"] = "-Qunused-arguments"
     log.info("CFLAGS: " + os.environ["CFLAGS"])
 
@@ -136,6 +137,7 @@ class Builder(build_ext):
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-regexp.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-stats.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-text.c"))
+        ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-time.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-unicode.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-uuid.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-vsv.c"))
