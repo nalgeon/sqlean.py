@@ -91,6 +91,8 @@ jobs:
                   # - musllinux
                   # - pypy
                   CIBW_SKIP: "cp36-* cp37-* cp38-* *-musllinux_* pp*"
+                  # set the minimum macOS version to 10.15
+                  MACOSX_DEPLOYMENT_TARGET: 10.15
 
             - name: Store wheels
               uses: actions/upload-artifact@v3
