@@ -34,7 +34,6 @@ download-sqlean:
           sqlite/stats \
           sqlite/text \
 		  sqlite/text/utf8 \
-		  sqlite/time \
           sqlite/unicode \
           sqlite/uuid \
           sqlite/vsv
@@ -49,7 +48,6 @@ download-sqlean:
 	cp sqlean-src/src/stats/*.h sqlite/stats/
 	cp sqlean-src/src/text/*.h sqlite/text/
 	cp sqlean-src/src/text/utf8/*.h sqlite/text/utf8
-	cp sqlean-src/src/time/*.h sqlite/time/
 	cp sqlean-src/src/unicode/*.h sqlite/unicode/
 	cp sqlean-src/src/uuid/*.h sqlite/uuid/
 	cp sqlean-src/src/vsv/*.h sqlite/vsv/
@@ -63,7 +61,6 @@ download-sqlean:
 	cat sqlean-src/src/regexp/pcre2/*.c sqlean-src/src/regexp/*.c > sqlite/sqlean-regexp.c
 	cat sqlean-src/src/stats/*.c > sqlite/sqlean-stats.c
 	cat sqlean-src/src/text/utf8/*.c sqlean-src/src/text/*.c > sqlite/sqlean-text.c
-	cat sqlean-src/src/time/*.c > sqlite/sqlean-time.c
 	cat sqlean-src/src/unicode/*.c > sqlite/sqlean-unicode.c
 	cat sqlean-src/src/uuid/*.c > sqlite/sqlean-uuid.c
 	cat sqlean-src/src/vsv/*.c > sqlite/sqlean-vsv.c

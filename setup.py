@@ -137,7 +137,6 @@ class Builder(build_ext):
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-regexp.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-stats.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-text.c"))
-        ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-time.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-unicode.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-uuid.c"))
         ext.sources.append(os.path.join(self.amalgamation_root, "sqlean-vsv.c"))
