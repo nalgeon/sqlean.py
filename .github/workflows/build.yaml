@@ -10,7 +10,7 @@ on:
             - .github/**
             - sqlean/**
             - src/**
-            - test/**
+            - tests/**
             - Makefile
             - setup.py
     pull_request:
@@ -45,7 +45,7 @@ jobs:
                       sqlean
                       src
                       sqlite
-                      test
+                      tests
 
     test:
         name: ${{ matrix.python-version }}
@@ -78,4 +78,4 @@ jobs:
                   make clean
                   python -m pip install --upgrade setuptools wheel
                   python setup.py build_ext -i
-                  python -m test
+                  python -m tests

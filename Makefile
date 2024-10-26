@@ -81,5 +81,5 @@ clean:
 build:
 	python -m pip install --upgrade setuptools wheel
 	python setup.py build_ext -i
-	python -m test
+	python -m tests
 	python -m pip wheel . -w dist
