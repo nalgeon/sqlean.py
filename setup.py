@@ -164,6 +164,7 @@ def get_setup_args():
         url="https://github.com/nalgeon/sqlean.py",
         package_dir={PACKAGE_NAME: PACKAGE_NAME},
         packages=packages,
+        python_requires=">=3.9",
         ext_modules=[
             Extension(
                 name=f"{PACKAGE_NAME}._sqlite3",
