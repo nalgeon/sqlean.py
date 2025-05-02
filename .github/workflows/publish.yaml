@@ -51,9 +51,10 @@ jobs:
             - name: Store sdist
               uses: actions/upload-artifact@v4
               with:
+                  name: sdist
                   path: dist/*.tar.gz
 
-    build:
+    wheels:
         name: Build wheels on ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
         needs: download-sources
@@ -97,21 +98,28 @@ jobs:
             - name: Store wheels
               uses: actions/upload-artifact@v4
               with:
+                  name: wheels-${{ matrix.os }}
                   path: ./wheelhouse/*.whl
 
     publish:
         name: Publish to PyPI
-        needs: [build, sdist]
+        needs: [sdist, wheels]
         runs-on: ubuntu-latest
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
         permissions:
             id-token: write
         steps:
+            - name: Download sdist
+              uses: actions/download-artifact@v4
+              with:
+                  name: sdist
+                  path: dist
+
             - name: Download wheels
               uses: actions/download-artifact@v4
               with:
-                  name: artifact
+                  pattern: wheels-*
                   path: dist
+                  merge-multiple: true
 
             - name: Publish to PyPI
               uses: pypa/gh-action-pypi-publish@release/v1
