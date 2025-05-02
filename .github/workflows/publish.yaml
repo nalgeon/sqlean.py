@@ -12,7 +12,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout sources
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Download external sources
               run: |
@@ -21,7 +21,7 @@ jobs:
                   make download-sqlean
 
             - name: Store sources
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: sources
                   path: |
@@ -41,7 +41,7 @@ jobs:
         needs: download-sources
         steps:
             - name: Download sources
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                   name: sources
 
@@ -49,7 +49,7 @@ jobs:
               run: pipx run build --sdist
 
             - name: Store sdist
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   path: dist/*.tar.gz
 
@@ -65,7 +65,7 @@ jobs:
                     - macos-latest
         steps:
             - name: Download sources
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                   name: sources
 
@@ -77,7 +77,7 @@ jobs:
                   platforms: arm64
 
             - name: Build wheels
-              uses: pypa/cibuildwheel@v2.21.3
+              uses: pypa/cibuildwheel@v2.23.3
               env:
                   # architectures:
                   # - 64-bit linux (x86_64/i686/aarch64/ppc64le/s390x)
@@ -95,7 +95,7 @@ jobs:
                   MACOSX_DEPLOYMENT_TARGET: 10.15
 
             - name: Store wheels
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   path: ./wheelhouse/*.whl
 
@@ -108,7 +108,7 @@ jobs:
             id-token: write
         steps:
             - name: Download wheels
-              uses: actions/download-artifact@v3
+              uses: actions/download-artifact@v4
               with:
                   name: artifact
                   path: dist
