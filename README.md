@@ -108,10 +108,7 @@ make download-sqlean
 Build and test the package:
 
 ```
-make clean
-python setup.py build_ext -i
-python -m tests
-python -m pip wheel . -w dist
+make clean build
 ```
 
 ## Credits

@@ -1,4 +1,3 @@
-import sys
 import unittest
 import unittest.mock
 import sqlean
@@ -31,7 +30,6 @@ class FuncTest(unittest.TestCase):
         self._assert_eq("dlevenshtein('abc', 'abcd')", 1)
         self._assert_eq("caverphone('awesome')", "AWSM111111")
 
-    @unittest.skipIf(sys.platform == "win32", "ipaddr is not supported on windows")
     def test_ipaddr(self):
         self._assert_eq("iphost('192.168.16.12/24')", "192.168.16.12")
         self._assert_eq("ipcontains('192.168.16.0/24', '192.168.16.3')", 1)
@@ -54,6 +52,9 @@ class FuncTest(unittest.TestCase):
         self._assert_eq("text_substring('hello world', 7)", "world")
         self._assert_eq("text_split('one|two|three', '|', 2)", "two")
         self._assert_eq("text_translate('hello', 'l', '1')", "he11o")
+
+    def test_time(self):
+        self._assert_eq("time_to_unix(time_date(2011, 11, 18))", "1321574400")
 
     def test_uuid(self):
         self._assert_eq("length(uuid4())", 36)
