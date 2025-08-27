@@ -43,16 +43,18 @@ conn.close()
 
 ## Installation
 
-A binary package (wheel) is available for the following operating systems:
-
--   Linux (x86_64/aarch64)
--   macOS (x86_64/arm64)
-
 ```
 pip install sqlean.py
 ```
 
 Note that the package name is `sqlean.py`, while the code imports are just `sqlean`. The `sqlean` package name was taken by some zomby project and the author seemed to be unavailable, so I had to add the `.py` suffix.
+
+A binary package (wheel) is available for the following operating systems:
+
+-   Linux (x86_64/aarch64)
+-   macOS (x86_64/arm64)
+
+Unfortunately, there are no wheels available for Windows.
 
 ## Usage
 
