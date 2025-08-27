@@ -62,7 +62,6 @@ jobs:
             matrix:
                 os:
                     - ubuntu-latest
-                    - windows-latest
                     - macos-latest
         steps:
             - name: Download sources
@@ -81,11 +80,9 @@ jobs:
               uses: pypa/cibuildwheel@v2.23.3
               env:
                   # architectures:
-                  # - 64-bit linux (x86_64/i686/aarch64/ppc64le/s390x)
-                  # - 64-bit windows (AMD64/x86/ARM64)
-                  # - 64-bit macos (x86_64/arm64/universal2)
+                  # - 64-bit linux (x86_64/aarch64)
+                  # - 64-bit macos (x86_64/arm64)
                   CIBW_ARCHS_LINUX: x86_64 aarch64
-                  CIBW_ARCHS_WINDOWS: AMD64 ARM64
                   CIBW_ARCHS_MACOS: x86_64 arm64
                   # disable builds:
                   # - unsupported python versions

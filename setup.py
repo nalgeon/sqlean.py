@@ -177,7 +177,6 @@ def get_setup_args():
             "Intended Audience :: Developers",
             "License :: OSI Approved :: zlib/libpng License",
             "Operating System :: MacOS :: MacOS X",
-            "Operating System :: Microsoft :: Windows",
             "Operating System :: POSIX",
             "Programming Language :: C",
             "Programming Language :: Python",

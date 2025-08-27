@@ -45,9 +45,8 @@ conn.close()
 
 A binary package (wheel) is available for the following operating systems:
 
--   Windows (64-bit)
--   Linux (64-bit)
--   macOS (both Intel and Apple processors)
+-   Linux (x86_64/aarch64)
+-   macOS (x86_64/arm64)
 
 ```
 pip install sqlean.py
