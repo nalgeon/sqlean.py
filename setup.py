@@ -22,7 +22,7 @@ log = logging.getLogger(__name__)
 
 PACKAGE_NAME = "sqlean"
 SQLEAN_VERSION = "0.27.2"
-VERSION = "3.50.4"
+VERSION = "3.50.4.1"
 
 SHORT_DESCRIPTION = "sqlite3 with extensions"
 LONG_DESCRIPTION = Path("README.md").read_text()
@@ -175,7 +175,6 @@ def get_setup_args():
         classifiers=[
             "Development Status :: 4 - Beta",
             "Intended Audience :: Developers",
-            "License :: OSI Approved :: zlib/libpng License",
             "Operating System :: MacOS :: MacOS X",
             "Operating System :: POSIX",
             "Programming Language :: C",
