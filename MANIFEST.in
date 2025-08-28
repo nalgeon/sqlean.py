@@ -19,6 +19,7 @@ include sqlite/regexp/pcre2/*.h
 include sqlite/stats/*.h
 include sqlite/text/*.h
 include sqlite/text/utf8/*.h
+include sqlite/time/*.h
 include sqlite/unicode/*.h
 include sqlite/uuid/*.h
 include sqlite/vsv/*.h
