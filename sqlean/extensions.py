@@ -13,6 +13,7 @@ _extensions = {
     "regexp",
     "stats",
     "text",
+    "time",
     "unicode",
     "uuid",
     "vsv",
