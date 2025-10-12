@@ -103,9 +103,6 @@ class Builder(build_ext):
         for feature in features:
             ext.define_macros.append(("SQLITE_%s" % feature, "1"))
 
-        # Always use memory for temp store.
-        ext.define_macros.append(("SQLITE_TEMP_STORE", "3"))
-
         # Increase the maximum number of "host parameters" which SQLite will accept
         ext.define_macros.append(("SQLITE_MAX_VARIABLE_NUMBER", "250000"))
 

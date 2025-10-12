@@ -1,5 +1,4 @@
 import unittest
-import unittest.mock
 import sqlean
 from sqlean import dbapi2 as sqlite
 from setup import SQLEAN_VERSION
@@ -54,7 +53,7 @@ class FuncTest(unittest.TestCase):
         self._assert_eq("text_translate('hello', 'l', '1')", "he11o")
 
     def test_time(self):
-        self._assert_eq("time_to_unix(time_date(2011, 11, 18))", "1321574400")
+        self._assert_eq("time_to_unix(time_date(2011, 11, 18))", 1321574400)
 
     def test_uuid(self):
         self._assert_eq("length(uuid4())", 36)
@@ -98,11 +97,30 @@ class EnableTest(unittest.TestCase):
         self.conn.close()
 
 
+class PragmaTest(unittest.TestCase):
+    def setUp(self):
+        self.conn = sqlite.connect(":memory:")
+
+    def tearDown(self):
+        self.conn.close()
+
+    def test_temp_store(self):
+        val = self._get_opt("TEMP_STORE")
+        self.assertEqual(val, "1")
+
+    def _get_opt(self, name):
+        cur = self.conn.execute("PRAGMA compile_options;")
+        for row in cur.fetchall():
+            if row[0].startswith(name + "="):
+                return row[0].split("=")[1]
+
+
 def suite():
     return unittest.TestSuite(
         (
             unittest.makeSuite(FuncTest),
             unittest.makeSuite(EnableTest),
+            unittest.makeSuite(PragmaTest),
         )
     )
 
