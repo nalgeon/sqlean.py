@@ -1,6 +1,6 @@
 # sqlean.py
 
-This package provides an SQLite Python wrapper bundled with [`sqlean`](https://github.com/nalgeon/sqlean) extensions. It's a drop-in replacement for the standard library's [`sqlite3`](https://docs.python.org/3/library/sqlite3.html) module.
+This package provides an SQLite Python wrapper bundled with [sqlean](https://github.com/nalgeon/sqlean) extensions. It's a drop-in replacement for the standard library's [sqlite3](https://docs.python.org/3/library/sqlite3.html) module.
 
 ```
 pip install sqlean.py
@@ -12,11 +12,11 @@ import sqlean
 # enable all extensions
 sqlean.extensions.enable_all()
 
-# has the same API as the default `sqlite3` module
+# has the same API as the default sqlite3 module
 conn = sqlean.connect(":memory:")
 conn.execute("create table employees(id, name)")
 
-# and comes with the `sqlean` extensions
+# and comes with sqlean extensions
 cur = conn.execute("select median(value) from generate_series(1, 99)")
 print(cur.fetchone())
 # (50.0,)
@@ -26,18 +26,17 @@ conn.close()
 
 ## Extensions
 
-`sqlean.py` contains 12 essential SQLite extensions:
+`sqlean.py` contains essential SQLite extensions:
 
 -   [crypto](https://github.com/nalgeon/sqlean/blob/main/docs/crypto.md): Hashing, encoding and decoding data
 -   [define](https://github.com/nalgeon/sqlean/blob/main/docs/define.md): User-defined functions and dynamic SQL
 -   [fileio](https://github.com/nalgeon/sqlean/blob/main/docs/fileio.md): Reading and writing files
 -   [fuzzy](https://github.com/nalgeon/sqlean/blob/main/docs/fuzzy.md): Fuzzy string matching and phonetics
 -   [ipaddr](https://github.com/nalgeon/sqlean/blob/main/docs/ipaddr.md): IP address manipulation
--   [math](https://github.com/nalgeon/sqlean/blob/main/docs/math.md): Math functions
 -   [regexp](https://github.com/nalgeon/sqlean/blob/main/docs/regexp.md): Regular expressions
 -   [stats](https://github.com/nalgeon/sqlean/blob/main/docs/stats.md): Math statistics
 -   [text](https://github.com/nalgeon/sqlean/blob/main/docs/text.md): String functions
--   [unicode](https://github.com/nalgeon/sqlean/blob/main/docs/unicode.md): Unicode support
+-   [time](https://github.com/nalgeon/sqlean/blob/main/docs/time.md): High-precision date/time
 -   [uuid](https://github.com/nalgeon/sqlean/blob/main/docs/uuid.md): Universally Unique IDentifiers
 -   [vsv](https://github.com/nalgeon/sqlean/blob/main/docs/vsv.md): CSV files as virtual tables
 
@@ -97,8 +96,6 @@ conn.close()
 
 ## Building from source
 
-For development purposes only.
-
 Prepare source files:
 
 ```
@@ -119,4 +116,4 @@ Based on the [pysqlite3](https://github.com/coleifer/pysqlite3) project. Availab
 
 ## Support
 
-The package is provided as-is, and I don't currently plan to change anything except to update the SQLite version from time to time.
+The package is provided as-is. If you need a version for Windows or another operating system, please build it yourself — I don't have the capacity to deal with it.
