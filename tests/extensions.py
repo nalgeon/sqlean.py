@@ -116,13 +116,10 @@ class PragmaTest(unittest.TestCase):
 
 
 def suite():
-    return unittest.TestSuite(
-        (
-            unittest.makeSuite(FuncTest),
-            unittest.makeSuite(EnableTest),
-            unittest.makeSuite(PragmaTest),
-        )
-    )
+    loader = unittest.TestLoader()
+    cases = (FuncTest, EnableTest, PragmaTest)
+    tests = [loader.loadTestsFromTestCase(c) for c in cases]
+    return unittest.TestSuite(tests)
 
 
 def test():
