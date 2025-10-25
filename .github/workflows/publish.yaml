@@ -12,7 +12,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout sources
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             - name: Download external sources
               run: |
@@ -77,18 +77,15 @@ jobs:
                   platforms: arm64
 
             - name: Build wheels
-              uses: pypa/cibuildwheel@v2.23.3
+              uses: pypa/cibuildwheel@v3.2.1
               env:
                   # architectures:
                   # - 64-bit linux (x86_64/aarch64)
                   # - 64-bit macos (x86_64/arm64)
                   CIBW_ARCHS_LINUX: x86_64 aarch64
                   CIBW_ARCHS_MACOS: x86_64 arm64
-                  # disable builds:
-                  # - unsupported python versions
-                  # - musllinux
-                  # - pypy
-                  CIBW_SKIP: "cp36-* cp37-* cp38-* *-musllinux_* pp*"
+                  # python versions 3.10 to 3.14
+                  CIBW_BUILD: "cp310-macosx* cp311-macosx* cp312-macosx* cp313-macosx* cp314-macosx* cp310-manylinux* cp311-manylinux* cp312-manylinux* cp313-manylinux* cp314-manylinux*"
                   # set the minimum macOS version to 10.15
                   MACOSX_DEPLOYMENT_TARGET: 10.15
 
