@@ -21,9 +21,7 @@ SQLITE_EXTENSION_INIT1
 #include "regexp/extension.h"
 #include "stats/extension.h"
 #include "text/extension.h"
-#if !defined(_WIN32)
 #include "time/extension.h"
-#endif
 #include "unicode/extension.h"
 #include "uuid/extension.h"
 #include "vsv/extension.h"
@@ -48,9 +46,7 @@ static int init_all(sqlite3* db) {
     regexp_init(db);
     stats_init(db);
     text_init(db);
-#if !defined(_WIN32)
     time_init(db);
-#endif
     unicode_init(db);
     uuid_init(db);
     vsv_init(db);
@@ -100,6 +96,7 @@ __declspec(dllexport)
     init_extension("SQLEAN_ENABLE_REGEXP", regexp_init, db);
     init_extension("SQLEAN_ENABLE_STATS", stats_init, db);
     init_extension("SQLEAN_ENABLE_TEXT", text_init, db);
+    init_extension("SQLEAN_ENABLE_TIME", time_init, db);
     init_extension("SQLEAN_ENABLE_UNICODE", unicode_init, db);
     init_extension("SQLEAN_ENABLE_UUID", uuid_init, db);
     init_extension("SQLEAN_ENABLE_VSV", vsv_init, db);
