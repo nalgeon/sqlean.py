@@ -2,6 +2,8 @@
 
 This package provides an SQLite Python wrapper bundled with [sqlean](https://github.com/nalgeon/sqlean) extensions. It's a drop-in replacement for the standard library's [sqlite3](https://docs.python.org/3/library/sqlite3.html) module.
 
+The project is no longer maintained.
+
 ```
 pip install sqlean.py
 ```
@@ -113,7 +115,3 @@ make clean build
 ## Credits
 
 Based on the [pysqlite3](https://github.com/coleifer/pysqlite3) project. Available under the [Zlib license](LICENSE).
-
-## Support
-
-The package is provided as-is. If you need a version for Windows or another operating system, please build it yourself — I don't have the capacity to deal with it.
