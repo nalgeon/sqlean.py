@@ -25,6 +25,8 @@ download-sqlean:
 	curl -L https://github.com/nalgeon/sqlean/archive/refs/tags/$(SQLEAN_VERSION).zip --output sqlean.zip
 	unzip -q sqlean.zip
 	mv sqlean-$(SQLEAN_VERSION) sqlean-src
+	# Fixes for MSVC, until they are upstream.
+	for p in patches/*.patch; do patch -d sqlean-src -p1 --forward < $$p || exit 1; done
 	# Copy each module directory as is: every .c file is compiled
 	# as a separate translation unit (see setup.py), the same way
 	# sqlean itself builds them. Never concatenate them.
