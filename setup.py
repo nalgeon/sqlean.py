@@ -81,6 +81,9 @@ class Builder(build_ext):
 
         if IS_MSVC:
             ext.extra_compile_args.append("/O2")
+            # sqlean uses C11 (_Static_assert, _Alignof, restrict),
+            # which MSVC only accepts in C11 mode or later.
+            ext.extra_compile_args.append("/std:c11")
         else:
             ext.extra_compile_args.append("-O2")
             # Python's sysconfig may pass flags the compiler doesn't use.
