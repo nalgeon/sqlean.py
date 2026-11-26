@@ -12,70 +12,73 @@ on:
             - src/**
             - tests/**
             - Makefile
+            - MANIFEST.in
+            - pyproject.toml
             - setup.py
     pull_request:
         branches:
             - main
     workflow_dispatch:
+    workflow_call:
 
 jobs:
-    download-sources:
-        name: Download and store sources
+    sdist:
+        name: Build sdist
         runs-on: ubuntu-latest
         steps:
             - name: Checkout sources
-              uses: actions/checkout@v5
+              uses: actions/checkout@v7
 
-            - name: Download external sources
+            - name: Download SQLite and sqlean sources
               run: |
                   make prepare-src
                   make download-sqlite
                   make download-sqlean
 
-            - name: Store sources
-              uses: actions/upload-artifact@v4
-              with:
-                  name: sources
-                  path: |
-                      MANIFEST.in
-                      Makefile
-                      README.md
-                      setup.cfg
-                      setup.py
-                      sqlean
-                      src
-                      sqlite
-                      tests
+            - name: Build sdist
+              run: pipx run build --sdist
 
-    test:
-        name: ${{ matrix.python-version }}
-        runs-on: ubuntu-latest
-        needs: download-sources
+            - name: Store sdist
+              uses: actions/upload-artifact@v7
+              with:
+                  name: sdist
+                  path: dist/*.tar.gz
+
+    wheels:
+        name: Wheels on ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
+        needs: sdist
         strategy:
             fail-fast: false
             matrix:
-                python-version:
-                    - "3.10"
-                    - "3.11"
-                    - "3.12"
-                    - "3.13"
-                    - "3.14"
+                os:
+                    - ubuntu-latest # linux x86_64
+                    - ubuntu-24.04-arm # linux aarch64
+                    - macos-15-intel # macos x86_64
+                    - macos-latest # macos arm64
+                    - windows-latest # windows x86_64
         steps:
-            - name: Download sources
-              uses: actions/download-artifact@v4
+            - name: Download sdist
+              uses: actions/download-artifact@v8
               with:
-                  name: sources
+                  name: sdist
+                  path: dist
 
-            - name: Setup Python
-              uses: actions/setup-python@v6
+            - name: Find sdist
+              id: sdist
+              shell: bash
+              run: echo "path=$(ls dist/*.tar.gz)" >> "$GITHUB_OUTPUT"
+
+            # Builds wheels from the sdist (so a broken MANIFEST.in fails here),
+            # then installs each one and runs the test suite against it.
+            # Configuration is in pyproject.toml.
+            - name: Build and test wheels
+              uses: pypa/cibuildwheel@v4.3.5
               with:
-                  python-version: ${{ matrix.python-version }}
+                  package-dir: ${{ steps.sdist.outputs.path }}
 
-            - name: Build and run tests
-              env:
-                  PYTHONPATH: ".:$PYTHONPATH"
-              run: |
-                  make clean
-                  python -m pip install --upgrade setuptools wheel
-                  python setup.py build_ext -i
-                  python -m tests
+            - name: Store wheels
+              uses: actions/upload-artifact@v7
+              with:
+                  name: wheels-${{ matrix.os }}
+                  path: ./wheelhouse/*.whl
