@@ -15,14 +15,12 @@ SQLITE_EXTENSION_INIT1
 #include "define/extension.h"
 #include "fileio/extension.h"
 #include "fuzzy/extension.h"
-#if !defined(_WIN32)
 #include "ipaddr/extension.h"
-#endif
+#include "math/extension.h"
 #include "regexp/extension.h"
 #include "stats/extension.h"
 #include "text/extension.h"
 #include "time/extension.h"
-#include "unicode/extension.h"
 #include "uuid/extension.h"
 #include "vsv/extension.h"
 
@@ -37,19 +35,19 @@ static void sqlean_version(sqlite3_context* context, int argc, sqlite3_value** a
 // init_all initializes all extensions.
 static int init_all(sqlite3* db) {
     crypto_init(db);
-    define_init(db);
     fileio_init(db);
     fuzzy_init(db);
-#if !defined(_WIN32)
     ipaddr_init(db);
-#endif
+    math_init(db);
     regexp_init(db);
     stats_init(db);
     text_init(db);
     time_init(db);
-    unicode_init(db);
     uuid_init(db);
     vsv_init(db);
+    // define must go last, so that user-defined functions
+    // can call any other sqlean function.
+    define_init(db);
     return SQLITE_OK;
 }
 
@@ -87,18 +85,16 @@ __declspec(dllexport)
 
     // SQLEAN_ENABLE is not set, enable individual extensions
     init_extension("SQLEAN_ENABLE_CRYPTO", crypto_init, db);
-    init_extension("SQLEAN_ENABLE_DEFINE", define_init, db);
     init_extension("SQLEAN_ENABLE_FILEIO", fileio_init, db);
     init_extension("SQLEAN_ENABLE_FUZZY", fuzzy_init, db);
-#if !defined(_WIN32)
     init_extension("SQLEAN_ENABLE_IPADDR", ipaddr_init, db);
-#endif
+    init_extension("SQLEAN_ENABLE_MATH", math_init, db);
     init_extension("SQLEAN_ENABLE_REGEXP", regexp_init, db);
     init_extension("SQLEAN_ENABLE_STATS", stats_init, db);
     init_extension("SQLEAN_ENABLE_TEXT", text_init, db);
     init_extension("SQLEAN_ENABLE_TIME", time_init, db);
-    init_extension("SQLEAN_ENABLE_UNICODE", unicode_init, db);
     init_extension("SQLEAN_ENABLE_UUID", uuid_init, db);
     init_extension("SQLEAN_ENABLE_VSV", vsv_init, db);
+    init_extension("SQLEAN_ENABLE_DEFINE", define_init, db);
     return SQLITE_OK;
 }

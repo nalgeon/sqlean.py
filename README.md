@@ -2,9 +2,7 @@
 
 This package provides an SQLite Python wrapper bundled with [sqlean](https://github.com/nalgeon/sqlean) extensions. It's a drop-in replacement for the standard library's [sqlite3](https://docs.python.org/3/library/sqlite3.html) module.
 
-The project is no longer maintained.
-
-```
+```text
 pip install sqlean.py
 ```
 
@@ -19,7 +17,7 @@ conn = sqlean.connect(":memory:")
 conn.execute("create table employees(id, name)")
 
 # and comes with sqlean extensions
-cur = conn.execute("select median(value) from generate_series(1, 99)")
+cur = conn.execute("select stats_median(value) from stats_seq(1, 99)")
 print(cur.fetchone())
 # (50.0,)
 
@@ -30,32 +28,32 @@ conn.close()
 
 `sqlean.py` contains essential SQLite extensions:
 
--   [crypto](https://github.com/nalgeon/sqlean/blob/main/docs/crypto.md): Hashing, encoding and decoding data
--   [define](https://github.com/nalgeon/sqlean/blob/main/docs/define.md): User-defined functions and dynamic SQL
--   [fileio](https://github.com/nalgeon/sqlean/blob/main/docs/fileio.md): Reading and writing files
--   [fuzzy](https://github.com/nalgeon/sqlean/blob/main/docs/fuzzy.md): Fuzzy string matching and phonetics
--   [ipaddr](https://github.com/nalgeon/sqlean/blob/main/docs/ipaddr.md): IP address manipulation
--   [regexp](https://github.com/nalgeon/sqlean/blob/main/docs/regexp.md): Regular expressions
--   [stats](https://github.com/nalgeon/sqlean/blob/main/docs/stats.md): Math statistics
--   [text](https://github.com/nalgeon/sqlean/blob/main/docs/text.md): String functions
--   [time](https://github.com/nalgeon/sqlean/blob/main/docs/time.md): High-precision date/time
--   [uuid](https://github.com/nalgeon/sqlean/blob/main/docs/uuid.md): Universally Unique IDentifiers
--   [vsv](https://github.com/nalgeon/sqlean/blob/main/docs/vsv.md): CSV files as virtual tables
+- [crypto](https://github.com/nalgeon/sqlean/blob/main/docs/crypto.md): Hashing, encoding and decoding data
+- [define](https://github.com/nalgeon/sqlean/blob/main/docs/define.md): User-defined functions and dynamic SQL
+- [fileio](https://github.com/nalgeon/sqlean/blob/main/docs/fileio.md): Reading and writing files
+- [fuzzy](https://github.com/nalgeon/sqlean/blob/main/docs/fuzzy.md): Fuzzy string matching and phonetics
+- [ipaddr](https://github.com/nalgeon/sqlean/blob/main/docs/ipaddr.md): IP address manipulation
+- [math](https://github.com/nalgeon/sqlean/blob/main/docs/math.md): Math functions
+- [regexp](https://github.com/nalgeon/sqlean/blob/main/docs/regexp.md): Regular expressions
+- [stats](https://github.com/nalgeon/sqlean/blob/main/docs/stats.md): Math statistics
+- [text](https://github.com/nalgeon/sqlean/blob/main/docs/text.md): String functions
+- [time](https://github.com/nalgeon/sqlean/blob/main/docs/time.md): High-precision date/time
+- [uuid](https://github.com/nalgeon/sqlean/blob/main/docs/uuid.md): Universally Unique IDentifiers
+- [vsv](https://github.com/nalgeon/sqlean/blob/main/docs/vsv.md): CSV files as virtual tables
 
 ## Installation
 
-```
+```text
 pip install sqlean.py
 ```
 
 Note that the package name is `sqlean.py`, while the code imports are just `sqlean`. The `sqlean` package name was taken by some zomby project and the author seemed to be unavailable, so I had to add the `.py` suffix.
 
-A binary package (wheel) is available for the following operating systems:
+A binary package (wheel) is available for Python 3.10+ on the following operating systems:
 
--   Linux (x86_64/aarch64)
--   macOS (x86_64/arm64)
-
-Unfortunately, there are no wheels available for Windows.
+- Linux (x86_64/aarch64, glibc and musl)
+- macOS (x86_64/arm64)
+- Windows (x86_64)
 
 ## Usage
 
@@ -78,7 +76,7 @@ import sqlean
 sqlean.extensions.enable_all()
 
 conn = sqlean.connect(":memory:")
-cur = conn.execute("select median(value) from generate_series(1, 99)")
+cur = conn.execute("select stats_median(value) from stats_seq(1, 99)")
 print(cur.fetchone())
 conn.close()
 ```
@@ -91,7 +89,7 @@ import sqlean
 sqlean.extensions.enable("stats", "text")
 
 conn = sqlean.connect(":memory:")
-cur = conn.execute("select median(value) from generate_series(1, 99)")
+cur = conn.execute("select stats_median(value) from stats_seq(1, 99)")
 print(cur.fetchone())
 conn.close()
 ```
@@ -100,7 +98,7 @@ conn.close()
 
 Prepare source files:
 
-```
+```text
 make prepare-src
 make download-sqlite
 make download-sqlean
@@ -108,7 +106,7 @@ make download-sqlean
 
 Build and test the package:
 
-```
+```text
 make clean build
 ```
 

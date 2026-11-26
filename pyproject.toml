@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.cibuildwheel]
+build = "cp310-* cp311-* cp312-* cp313-* cp314-* cp315-*"
+# Free-threaded builds are not supported by the C module.
+skip = "cp31?t-*"
+# Run the full test suite against every installed wheel.
+test-sources = ["tests", "setup.py"]
+test-command = "python -m tests"
+
+[tool.cibuildwheel.linux]
+archs = ["native"]
+
+[tool.cibuildwheel.macos]
+archs = ["native"]
+environment = { MACOSX_DEPLOYMENT_TARGET = "10.15" }
+
+[tool.cibuildwheel.windows]
+archs = ["AMD64"]
+# The module has no external DLL dependencies.
+repair-wheel-command = ""

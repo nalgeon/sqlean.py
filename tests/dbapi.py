@@ -26,7 +26,9 @@ import unittest
 from sqlean import dbapi2 as sqlite
 
 #from test.support import TESTFN, unlink
-TESTFN = '/tmp/pysqlite3_test'
+# Relative to the current directory (as in CPython's test.support),
+# so it works on Windows and in 'file:' URIs.
+TESTFN = '@test_pysqlite3_tmp'
 from os import unlink
 
 

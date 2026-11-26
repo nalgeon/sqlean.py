@@ -1,7 +1,12 @@
+import pathlib
+import re
 import unittest
 import sqlean
 from sqlean import dbapi2 as sqlite
-from setup import SQLEAN_VERSION
+
+# Read the expected version from setup.py without executing it.
+_setup_py = pathlib.Path(__file__).parent.parent / "setup.py"
+SQLEAN_VERSION = re.search(r'SQLEAN_VERSION = "(.+)"', _setup_py.read_text()).group(1)
 
 
 class FuncTest(unittest.TestCase):
@@ -34,18 +39,22 @@ class FuncTest(unittest.TestCase):
         self._assert_eq("ipcontains('192.168.16.0/24', '192.168.16.3')", 1)
 
     def test_math(self):
+        # built into sqlite (SQLITE_ENABLE_MATH_FUNCTIONS)
         self._assert_eq("trunc(3.9)", 3)
         self._assert_eq("sqrt(100)", 10)
         self._assert_eq("round(degrees(pi()))", 180)
+        # sqlean math extension
+        self._assert_eq("math_trunc(3.9)", 3)
+        self._assert_eq("math_sqrt(100)", 10)
 
     def test_regexp(self):
-        self._assert_eq("regexp_replace('1 10 100', '\d+', '**')", "** ** **")
+        self._assert_eq(r"regexp_replace('1 10 100', '\d+', '**')", "** ** **")
         self._assert_eq("regexp_substr('abcdef', 'b(.)d')", "bcd")
         self._assert_eq("regexp_capture('abcdef', 'b(.)d', 1)", "c")
 
     def test_stats(self):
-        self._assert_eq("percentile(value, 50) from generate_series(1, 99)", 50)
-        self._assert_eq("median(value) from generate_series(1, 99)", 50)
+        self._assert_eq("stats_perc(value, 50) from stats_seq(1, 99)", 50)
+        self._assert_eq("stats_median(value) from stats_seq(1, 99)", 50)
 
     def test_text(self):
         self._assert_eq("text_substring('hello world', 7)", "world")
@@ -58,9 +67,9 @@ class FuncTest(unittest.TestCase):
     def test_uuid(self):
         self._assert_eq("length(uuid4())", 36)
 
-    def test_unicode(self):
-        self._assert_eq("nupper('пРиВеТ')", "ПРИВЕТ")
-        self._assert_eq("unaccent('hôtel')", "hotel")
+    def test_text_unicode(self):
+        self._assert_eq("text_upper('пРиВеТ')", "ПРИВЕТ")
+        self._assert_eq("fuzzy_translit('hôtel')", "hotel")
 
     def test_version(self):
         self._assert_eq("sqlean_version()", SQLEAN_VERSION)
@@ -77,7 +86,7 @@ class EnableTest(unittest.TestCase):
         self.conn = sqlite.connect(":memory:")
 
     def test_enabled_1(self):
-        sql = "select median(value) from generate_series(1, 99)"
+        sql = "select stats_median(value) from stats_seq(1, 99)"
         cur = self.conn.execute(sql)
         got = cur.fetchone()[0]
         self.assertEqual(got, 50)

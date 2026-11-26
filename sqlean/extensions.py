@@ -10,11 +10,11 @@ _extensions = {
     "fileio",
     "fuzzy",
     "ipaddr",
+    "math",
     "regexp",
     "stats",
     "text",
     "time",
-    "unicode",
     "uuid",
     "vsv",
 }
